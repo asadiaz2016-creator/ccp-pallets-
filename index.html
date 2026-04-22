@@ -27,6 +27,7 @@
     min-height: 100vh;
   }
 
+  /* HEADER */
   .header {
     background: var(--dark);
     padding: 20px 24px 22px;
@@ -67,6 +68,7 @@
     color: var(--accent);
   }
 
+  /* STATS */
   .stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -99,6 +101,7 @@
   }
   .stat-card.s-cero .stat-val { color: var(--red); }
 
+  /* CONTROLS */
   .controls {
     background: var(--white);
     margin: 12px 16px 0;
@@ -118,7 +121,7 @@
   .search-wrap {
     position: relative;
     flex: 1;
-    min-width: 160px;
+    min-width: 150px;
   }
   .search-wrap input {
     width: 100%;
@@ -182,55 +185,12 @@
     white-space: nowrap;
   }
   .btn:hover { opacity: .87; transform: translateY(-1px); }
-  .btn-wa  { background: var(--green); color: #fff; }
-  .btn-save { background: var(--dark); color: #fff; }
+  .btn-wa   { background: var(--green); color: #fff; }
+  .btn-save { background: var(--dark);  color: #fff; }
   .btn-clear { background: var(--input-bg); color: var(--muted); border: 1.5px solid var(--border); }
   .btn-clear:hover { border-color: var(--red); color: var(--red); opacity: 1; }
 
-  .area-input-wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px 0;
-  }
-  .area-input-wrap label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    color: var(--muted);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .area-input-wrap input {
-    padding: 9px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    font-family: 'Space Mono', monospace;
-    font-size: 14px;
-    font-weight: 700;
-    background: var(--white);
-    color: var(--text);
-    outline: none;
-    width: 220px;
-    transition: border-color .2s, box-shadow .2s;
-    letter-spacing: .5px;
-  }
-  .area-input-wrap input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(245,166,35,.15);
-  }
-  .area-badge {
-    background: var(--dark);
-    color: #fff;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 6px 14px;
-    border-radius: 20px;
-    letter-spacing: .5px;
-    white-space: nowrap;
-  }
-
+  /* TABLE */
   .table-wrap {
     margin: 12px 16px 32px;
     background: var(--white);
@@ -252,6 +212,7 @@
   }
   thead th.sortable { cursor: pointer; user-select: none; }
   thead th.sortable:hover { color: #fff; }
+  thead th.th-c { text-align: center; }
 
   tbody tr {
     border-bottom: 1px solid var(--border);
@@ -261,12 +222,12 @@
   tbody tr:hover { background: #f7f9fc; }
   tbody tr.row-zero td { opacity: .45; }
 
-  td { padding: 11px 14px; font-size: 14px; }
+  td { padding: 9px 14px; font-size: 14px; }
   .td-idx {
     font-family: 'Space Mono', monospace;
     font-size: 11px;
     color: var(--muted);
-    width: 36px;
+    width: 32px;
   }
   .td-parte {
     font-family: 'Space Mono', monospace;
@@ -275,16 +236,12 @@
     letter-spacing: .5px;
     white-space: nowrap;
   }
-  .td-fecha {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-  .td-qty { text-align: center; width: 110px; }
+  .td-qty { text-align: center; width: 100px; }
+  .td-area { width: 130px; }
+
   .qty-input {
-    width: 82px;
-    padding: 7px 10px;
+    width: 76px;
+    padding: 7px 8px;
     border: 1.5px solid var(--border);
     border-radius: 7px;
     font-family: 'Space Mono', monospace;
@@ -303,9 +260,30 @@
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(245,166,35,.18);
   }
-  .qty-input.changed {
-    border-color: var(--dark);
-    background: #fff8ec;
+  .qty-input.changed { border-color: var(--dark); background: #fff8ec; }
+
+  .area-input {
+    width: 110px;
+    padding: 7px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--input-bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    letter-spacing: .5px;
+  }
+  .area-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(245,166,35,.18);
+  }
+  .area-input.filled {
+    background: #eef6ff;
+    border-color: #a0c4ff;
+    color: #1a4a8a;
   }
 
   .empty-msg {
@@ -316,6 +294,7 @@
     font-family: 'Space Mono', monospace;
   }
 
+  /* TOAST */
   .toast {
     position: fixed;
     bottom: 20px;
@@ -341,6 +320,7 @@
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="header-left">
     <div class="company">Custom Crates &amp; Pallets · CCP</div>
@@ -352,6 +332,7 @@
   </div>
 </div>
 
+<!-- STATS -->
 <div class="stats">
   <div class="stat-card s-total">
     <div class="stat-label">Total Pallets</div>
@@ -366,11 +347,12 @@
     <div class="stat-val" id="statZero">0</div>
   </div>
   <div class="stat-card">
-    <div class="stat-label">Áreas con datos</div>
+    <div class="stat-label">Áreas distintas</div>
     <div class="stat-val" id="statAreas">0</div>
   </div>
 </div>
 
+<!-- CONTROLS -->
 <div class="controls">
   <div class="ctrl-row1">
     <div class="search-wrap">
@@ -387,24 +369,19 @@
       <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       WhatsApp
     </button>
-    <button class="btn btn-save" onclick="guardarTodo()">💾 Guardar</button>
-    <button class="btn btn-clear" onclick="limpiarArea()">↺ Limpiar área</button>
+    <button class="btn btn-save" onclick="guardarTodo()">💾 Guardar todo</button>
+    <button class="btn btn-clear" onclick="limpiarTodo()">↺ Limpiar todo</button>
   </div>
 </div>
 
-<div class="area-input-wrap">
-  <label>📍 Área:</label>
-  <input type="text" id="areaInput" placeholder="Ej: 1, 2, Yard Norte..." maxlength="40">
-  <span class="area-badge" id="areaBadge">—</span>
-</div>
-
+<!-- TABLE -->
 <div class="table-wrap">
   <table>
     <thead>
       <tr>
         <th>#</th>
         <th class="sortable" onclick="sortBy('parte')">N° PARTE ⇅</th>
-        <th style="text-align:center">CANTIDAD</th>
+        <th class="th-c sortable" onclick="sortBy('qty')">CANTIDAD ⇅</th>
         <th>ÁREA</th>
       </tr>
     </thead>
@@ -421,7 +398,8 @@ const PARTS = [
   '60X40 GB','60X40 SDI','45X45','48X40 REP'
 ];
 
-let inventory = {};
+// data[part] = { qty, area }
+let data = {};
 let sortKey = null;
 let sortAsc = true;
 
@@ -429,127 +407,111 @@ function todayStr() {
   return new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric'});
 }
 
-function getCurrentArea() {
-  return document.getElementById('areaInput').value.trim() || '—';
-}
+function pid(part) { return part.replace(/\s+/g,'_'); }
 
-function initInventory() {
-  try { inventory = JSON.parse(localStorage.getItem('ccp_inv_v3') || '{}'); } catch(e) { inventory = {}; }
+function initData() {
+  try { data = JSON.parse(localStorage.getItem('ccp_inv_v4') || '{}'); } catch(e) { data = {}; }
+  PARTS.forEach(p => { if (!data[p]) data[p] = { qty: 0, area: '' }; });
   const op = localStorage.getItem('ccp_operator');
   if (op) document.getElementById('operadorInput').value = op;
-  const area = localStorage.getItem('ccp_last_area');
-  if (area) {
-    document.getElementById('areaInput').value = area;
-    document.getElementById('areaBadge').textContent = area;
-  }
 }
 
-function ensureArea(area) {
-  if (!area || area === '—') return;
-  if (!inventory[area]) inventory[area] = {};
-  PARTS.forEach(p => { if (!inventory[area][p]) inventory[area][p] = { qty: 0 }; });
-}
-
-function saveInventory() {
-  localStorage.setItem('ccp_inv_v3', JSON.stringify(inventory));
+function saveData() {
+  // Read current values from DOM before saving
+  PARTS.forEach(p => {
+    const qInp = document.getElementById('q-' + pid(p));
+    const aInp = document.getElementById('a-' + pid(p));
+    if (qInp) data[p].qty  = Math.max(0, parseInt(qInp.value) || 0);
+    if (aInp) data[p].area = aInp.value.trim();
+  });
+  localStorage.setItem('ccp_inv_v4', JSON.stringify(data));
   const op = document.getElementById('operadorInput').value.trim();
   if (op) localStorage.setItem('ccp_operator', op);
-  const area = getCurrentArea();
-  if (area && area !== '—') localStorage.setItem('ccp_last_area', area);
 }
 
-function getQty(area, part) { return inventory[area]?.[part]?.qty ?? 0; }
-
 function renderTable() {
-  const area = getCurrentArea();
-  ensureArea(area);
   const search = document.getElementById('searchInput').value.trim().toLowerCase();
   let parts = [...PARTS];
   if (sortKey === 'parte') parts.sort((a,b) => sortAsc ? a.localeCompare(b) : b.localeCompare(a));
-  if (sortKey === 'qty') parts.sort((a,b) => { const d = getQty(area,a)-getQty(area,b); return sortAsc?d:-d; });
+  if (sortKey === 'qty')   parts.sort((a,b) => sortAsc ? data[a].qty - data[b].qty : data[b].qty - data[a].qty);
   const filtered = search ? parts.filter(p => p.toLowerCase().includes(search)) : parts;
   if (!filtered.length) {
     document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" class="empty-msg">Sin resultados.</td></tr>';
     return;
   }
   document.getElementById('tableBody').innerHTML = filtered.map((part, i) => {
-    const e = inventory[area]?.[part] ?? { qty: 0 };
-    const id = part.replace(/\s+/g,'_');
-    return `<tr class="${e.qty===0?'row-zero':''}" id="row-${id}">
+    const d = data[part];
+    const id = pid(part);
+    return `<tr class="${d.qty===0?'row-zero':''}" id="row-${id}">
       <td class="td-idx">${i+1}</td>
       <td class="td-parte">${part}</td>
       <td class="td-qty">
-        <input class="qty-input" type="number" min="0" value="${e.qty}"
-          data-part="${part}" data-orig="${e.qty}" id="inp-${id}"
-          oninput="onQtyInput(this)" onchange="onQtyChange(this)">
+        <input class="qty-input" type="number" min="0"
+          id="q-${id}" value="${d.qty}"
+          oninput="onQtyInput(this,'${id}')"
+          onchange="onFieldChange()">
       </td>
-      <td class="td-fecha">${area}</td>
+      <td class="td-area">
+        <input class="area-input ${d.area?'filled':''}" type="text"
+          id="a-${id}" value="${d.area}" placeholder="Área..."
+          maxlength="20"
+          oninput="onAreaInput(this,'${id}')"
+          onchange="onFieldChange()">
+      </td>
     </tr>`;
   }).join('');
 }
 
-function onQtyInput(inp) {
-  inp.classList.toggle('changed', (parseInt(inp.value)||0) !== (parseInt(inp.dataset.orig)||0));
+function onQtyInput(inp, id) {
+  const val = Math.max(0, parseInt(inp.value)||0);
+  const row = document.getElementById('row-'+id);
+  if (row) row.className = val===0?'row-zero':'';
 }
 
-function onQtyChange(inp) {
-  const area = getCurrentArea();
-  if (!area || area === '—') { showToast('⚠️ Escribe el número de área primero'); inp.value = inp.dataset.orig; return; }
-  ensureArea(area);
-  const part = inp.dataset.part;
-  const val = Math.max(0, parseInt(inp.value)||0);
-  inp.value = val;
-  inventory[area][part] = { qty: val };
-  inp.dataset.orig = val;
-  inp.classList.remove('changed');
-  saveInventory();
+function onAreaInput(inp, id) {
+  inp.classList.toggle('filled', inp.value.trim().length > 0);
+}
+
+function onFieldChange() {
+  saveData();
   updateStats();
-  const row = document.getElementById('row-'+part.replace(/\s+/g,'_'));
-  if (row) row.className = val===0?'row-zero':'';
-  showToast('✓ Guardado: ' + part + ' = ' + val);
 }
 
 function guardarTodo() {
-  const area = getCurrentArea();
-  if (!area || area === '—') { showToast('⚠️ Escribe el número de área primero'); return; }
-  ensureArea(area);
-  document.querySelectorAll('.qty-input').forEach(inp => {
-    const val = Math.max(0, parseInt(inp.value)||0);
-    inventory[area][inp.dataset.part] = { qty: val };
-    inp.dataset.orig = val;
-    inp.classList.remove('changed');
-  });
-  saveInventory();
+  saveData();
   updateStats();
   renderTable();
-  showToast('✓ Todos los registros guardados');
+  showToast('✓ Todo guardado');
 }
 
-function limpiarArea() {
-  const area = getCurrentArea();
-  if (!area || area === '—') { showToast('⚠️ Escribe el número de área primero'); return; }
-  if (!confirm('¿Poner en cero todos los conteos del área "' + area + '"?')) return;
-  PARTS.forEach(p => { if (inventory[area]) inventory[area][p] = { qty: 0 }; });
-  saveInventory();
+function limpiarTodo() {
+  if (!confirm('¿Borrar todas las cantidades y áreas?')) return;
+  PARTS.forEach(p => data[p] = { qty: 0, area: '' });
+  localStorage.setItem('ccp_inv_v4', JSON.stringify(data));
   renderTable();
   updateStats();
-  showToast('Área ' + area + ' limpiada');
+  showToast('Inventario limpiado');
 }
 
 function sortBy(key) {
+  saveData(); // save before re-render
   sortKey === key ? sortAsc = !sortAsc : (sortKey = key, sortAsc = true);
   renderTable();
 }
 
 function updateStats() {
-  const area = getCurrentArea();
-  let total=0, cap=0, zero=0;
-  PARTS.forEach(p => { const q=getQty(area,p); total+=q; q>0?cap++:zero++; });
-  const areasData = Object.keys(inventory).filter(a => PARTS.some(p => getQty(a,p)>0)).length;
+  let total = 0, cap = 0, zero = 0;
+  const areasSet = new Set();
+  PARTS.forEach(p => {
+    const q = data[p].qty;
+    total += q;
+    if (q > 0) { cap++; if (data[p].area) areasSet.add(data[p].area.trim().toLowerCase()); }
+    else zero++;
+  });
   document.getElementById('statTotal').textContent = total.toLocaleString();
   document.getElementById('statCap').textContent = cap;
   document.getElementById('statZero').textContent = zero;
-  document.getElementById('statAreas').textContent = areasData;
+  document.getElementById('statAreas').textContent = areasSet.size;
 }
 
 function enviarWA() {
@@ -557,18 +519,26 @@ function enviarWA() {
   const op = document.getElementById('operadorInput').value.trim() || 'Sin nombre';
   const fecha = todayStr();
   let msg = `📦 *INVENTARIO CCP — PALLETS*\n📅 ${fecha}   👤 ${op}\n${'─'.repeat(30)}\n\n`;
-  let grand = 0;
-  const areas = Object.keys(inventory);
-  if (!areas.length) { showToast('⚠️ No hay cantidades capturadas'); return; }
-  areas.forEach(area => {
-    const lines = PARTS.map(p => {
-      const q = getQty(area, p);
-      if (q > 0) { grand += q; return `  • ${p}: *${q}*`; }
-      return null;
-    }).filter(Boolean);
-    if (lines.length) msg += `📍 *ÁREA ${area}*\n${lines.join('\n')}\n\n`;
+
+  // Group by area
+  const byArea = {};
+  PARTS.forEach(p => {
+    const q = data[p].qty;
+    if (q > 0) {
+      const a = data[p].area.trim() || 'Sin área';
+      if (!byArea[a]) byArea[a] = [];
+      byArea[a].push(`  • ${p}: *${q}*`);
+    }
   });
-  if (!grand) { showToast('⚠️ No hay cantidades capturadas'); return; }
+
+  const areas = Object.keys(byArea);
+  if (!areas.length) { showToast('⚠️ No hay cantidades capturadas'); return; }
+
+  areas.forEach(a => {
+    msg += `📍 *ÁREA ${a}*\n${byArea[a].join('\n')}\n\n`;
+  });
+
+  let grand = PARTS.reduce((s,p) => s + data[p].qty, 0);
   msg += `${'─'.repeat(30)}\n*TOTAL GENERAL: ${grand.toLocaleString()} pzas*`;
   window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
 }
@@ -581,16 +551,10 @@ function showToast(msg) {
   t._t = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-document.getElementById('searchInput').addEventListener('input', renderTable);
-document.getElementById('areaInput').addEventListener('input', function() {
-  const val = this.value.trim();
-  document.getElementById('areaBadge').textContent = val || '—';
-  renderTable();
-  updateStats();
-});
+document.getElementById('searchInput').addEventListener('input', () => { saveData(); renderTable(); });
 
-// Init
-initInventory();
+// INIT
+initData();
 document.getElementById('fechaVal').textContent = todayStr();
 renderTable();
 updateStats();
