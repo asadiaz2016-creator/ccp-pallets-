@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCP — Inventario de Pallets</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f2f5;
+    --white: #ffffff;
+    --dark: #1a1f2e;
+    --dark2: #252b3b;
+    --accent: #f5a623;
+    --green: #25d366;
+    --red: #e53935;
+    --border: #e2e6ed;
+    --text: #1a1f2e;
+    --muted: #8a94a6;
+    --input-bg: #f7f9fc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--dark);
+    padding: 20px 24px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-left .company {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #6b7a99;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .header-left h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .header-right { text-align: right; }
+  .header-right .fecha-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #6b7a99;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .header-right .fecha-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 16px 16px 0;
+  }
+  @media (min-width: 480px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+  .stat-card {
+    background: var(--white);
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    padding: 14px 16px;
+  }
+  .stat-card.s-total { border-color: var(--dark); }
+  .stat-card.s-cero  { border-color: var(--red); }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .stat-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-card.s-cero .stat-val { color: var(--red); }
+
+  .controls {
+    background: var(--white);
+    margin: 12px 16px 0;
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .ctrl-row1, .ctrl-row2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 160px;
+  }
+  .search-wrap input {
+    width: 100%;
+    padding: 9px 14px 9px 36px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    background: var(--input-bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap .ico {
+    position: absolute;
+    left: 11px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 15px;
+    pointer-events: none;
+  }
+  .por-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .por-wrap label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .por-wrap input {
+    padding: 9px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    background: var(--input-bg);
+    color: var(--text);
+    outline: none;
+    width: 170px;
+    transition: border-color .2s;
+  }
+  .por-wrap input:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .2s, transform .15s;
+    white-space: nowrap;
+  }
+  .btn:hover { opacity: .87; transform: translateY(-1px); }
+  .btn-wa  { background: var(--green); color: #fff; }
+  .btn-save { background: var(--dark); color: #fff; }
+  .btn-clear { background: var(--input-bg); color: var(--muted); border: 1.5px solid var(--border); }
+  .btn-clear:hover { border-color: var(--red); color: var(--red); opacity: 1; }
+
+  .area-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px 0;
+  }
+  .area-input-wrap label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .area-input-wrap input {
+    padding: 9px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    background: var(--white);
+    color: var(--text);
+    outline: none;
+    width: 220px;
+    transition: border-color .2s, box-shadow .2s;
+    letter-spacing: .5px;
+  }
+  .area-input-wrap input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(245,166,35,.15);
+  }
+  .area-badge {
+    background: var(--dark);
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    letter-spacing: .5px;
+    white-space: nowrap;
+  }
+
+  .table-wrap {
+    margin: 12px 16px 32px;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--dark2); }
+  thead th {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #8a94a6;
+    text-transform: uppercase;
+    padding: 13px 14px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  thead th.sortable { cursor: pointer; user-select: none; }
+  thead th.sortable:hover { color: #fff; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f7f9fc; }
+  tbody tr.row-zero td { opacity: .45; }
+
+  td { padding: 11px 14px; font-size: 14px; }
+  .td-idx {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    width: 36px;
+  }
+  .td-parte {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: .5px;
+    white-space: nowrap;
+  }
+  .td-fecha {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .td-qty { text-align: center; width: 110px; }
+  .qty-input {
+    width: 82px;
+    padding: 7px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    background: var(--input-bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    -moz-appearance: textfield;
+  }
+  .qty-input::-webkit-inner-spin-button,
+  .qty-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .qty-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(245,166,35,.18);
+  }
+  .qty-input.changed {
+    border-color: var(--dark);
+    background: #fff8ec;
+  }
+
+  .empty-msg {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--dark);
+    color: #fff;
+    padding: 11px 22px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 300;
+    opacity: 0;
+    transition: all .3s;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="company">Custom Crates &amp; Pallets · CCP</div>
+    <h1>Inventario Diario</h1>
+  </div>
+  <div class="header-right">
+    <div class="fecha-label">Fecha</div>
+    <div class="fecha-val" id="fechaVal">—</div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat-card s-total">
+    <div class="stat-label">Total Pallets</div>
+    <div class="stat-val" id="statTotal">0</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Partes capturadas</div>
+    <div class="stat-val" id="statCap">0</div>
+  </div>
+  <div class="stat-card s-cero">
+    <div class="stat-label">En cero</div>
+    <div class="stat-val" id="statZero">0</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Áreas con datos</div>
+    <div class="stat-val" id="statAreas">0</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="ctrl-row1">
+    <div class="search-wrap">
+      <span class="ico">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar número de parte...">
+    </div>
+    <div class="por-wrap">
+      <label>POR:</label>
+      <input type="text" id="operadorInput" placeholder="Nombre del operador">
+    </div>
+  </div>
+  <div class="ctrl-row2">
+    <button class="btn btn-wa" onclick="enviarWA()">
+      <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </button>
+    <button class="btn btn-save" onclick="guardarTodo()">💾 Guardar</button>
+    <button class="btn btn-clear" onclick="limpiarArea()">↺ Limpiar área</button>
+  </div>
+</div>
+
+<div class="area-input-wrap">
+  <label>📍 Área:</label>
+  <input type="text" id="areaInput" placeholder="Ej: 1, 2, Yard Norte..." maxlength="40">
+  <span class="area-badge" id="areaBadge">—</span>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th class="sortable" onclick="sortBy('parte')">N° PARTE ⇅</th>
+        <th style="text-align:center">CANTIDAD</th>
+        <th>ÁREA</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PARTS = [
+  '48X40  #1','48X40 #2A','48X40 #2B','48X40  GMA',
+  '48X40 BLOCK','48X40 SDI','72X40 SD','60X40 SD',
+  '60X40 GB','60X40 SDI','45X45','48X40 REP'
+];
+
+let inventory = {};
+let sortKey = null;
+let sortAsc = true;
+
+function todayStr() {
+  return new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric'});
+}
+
+function getCurrentArea() {
+  return document.getElementById('areaInput').value.trim() || '—';
+}
+
+function initInventory() {
+  try { inventory = JSON.parse(localStorage.getItem('ccp_inv_v3') || '{}'); } catch(e) { inventory = {}; }
+  const op = localStorage.getItem('ccp_operator');
+  if (op) document.getElementById('operadorInput').value = op;
+  const area = localStorage.getItem('ccp_last_area');
+  if (area) {
+    document.getElementById('areaInput').value = area;
+    document.getElementById('areaBadge').textContent = area;
+  }
+}
+
+function ensureArea(area) {
+  if (!area || area === '—') return;
+  if (!inventory[area]) inventory[area] = {};
+  PARTS.forEach(p => { if (!inventory[area][p]) inventory[area][p] = { qty: 0 }; });
+}
+
+function saveInventory() {
+  localStorage.setItem('ccp_inv_v3', JSON.stringify(inventory));
+  const op = document.getElementById('operadorInput').value.trim();
+  if (op) localStorage.setItem('ccp_operator', op);
+  const area = getCurrentArea();
+  if (area && area !== '—') localStorage.setItem('ccp_last_area', area);
+}
+
+function getQty(area, part) { return inventory[area]?.[part]?.qty ?? 0; }
+
+function renderTable() {
+  const area = getCurrentArea();
+  ensureArea(area);
+  const search = document.getElementById('searchInput').value.trim().toLowerCase();
+  let parts = [...PARTS];
+  if (sortKey === 'parte') parts.sort((a,b) => sortAsc ? a.localeCompare(b) : b.localeCompare(a));
+  if (sortKey === 'qty') parts.sort((a,b) => { const d = getQty(area,a)-getQty(area,b); return sortAsc?d:-d; });
+  const filtered = search ? parts.filter(p => p.toLowerCase().includes(search)) : parts;
+  if (!filtered.length) {
+    document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" class="empty-msg">Sin resultados.</td></tr>';
+    return;
+  }
+  document.getElementById('tableBody').innerHTML = filtered.map((part, i) => {
+    const e = inventory[area]?.[part] ?? { qty: 0 };
+    const id = part.replace(/\s+/g,'_');
+    return `<tr class="${e.qty===0?'row-zero':''}" id="row-${id}">
+      <td class="td-idx">${i+1}</td>
+      <td class="td-parte">${part}</td>
+      <td class="td-qty">
+        <input class="qty-input" type="number" min="0" value="${e.qty}"
+          data-part="${part}" data-orig="${e.qty}" id="inp-${id}"
+          oninput="onQtyInput(this)" onchange="onQtyChange(this)">
+      </td>
+      <td class="td-fecha">${area}</td>
+    </tr>`;
+  }).join('');
+}
+
+function onQtyInput(inp) {
+  inp.classList.toggle('changed', (parseInt(inp.value)||0) !== (parseInt(inp.dataset.orig)||0));
+}
+
+function onQtyChange(inp) {
+  const area = getCurrentArea();
+  if (!area || area === '—') { showToast('⚠️ Escribe el número de área primero'); inp.value = inp.dataset.orig; return; }
+  ensureArea(area);
+  const part = inp.dataset.part;
+  const val = Math.max(0, parseInt(inp.value)||0);
+  inp.value = val;
+  inventory[area][part] = { qty: val };
+  inp.dataset.orig = val;
+  inp.classList.remove('changed');
+  saveInventory();
+  updateStats();
+  const row = document.getElementById('row-'+part.replace(/\s+/g,'_'));
+  if (row) row.className = val===0?'row-zero':'';
+  showToast('✓ Guardado: ' + part + ' = ' + val);
+}
+
+function guardarTodo() {
+  const area = getCurrentArea();
+  if (!area || area === '—') { showToast('⚠️ Escribe el número de área primero'); return; }
+  ensureArea(area);
+  document.querySelectorAll('.qty-input').forEach(inp => {
+    const val = Math.max(0, parseInt(inp.value)||0);
+    inventory[area][inp.dataset.part] = { qty: val };
+    inp.dataset.orig = val;
+    inp.classList.remove('changed');
+  });
+  saveInventory();
+  updateStats();
+  renderTable();
+  showToast('✓ Todos los registros guardados');
+}
+
+function limpiarArea() {
+  const area = getCurrentArea();
+  if (!area || area === '—') { showToast('⚠️ Escribe el número de área primero'); return; }
+  if (!confirm('¿Poner en cero todos los conteos del área "' + area + '"?')) return;
+  PARTS.forEach(p => { if (inventory[area]) inventory[area][p] = { qty: 0 }; });
+  saveInventory();
+  renderTable();
+  updateStats();
+  showToast('Área ' + area + ' limpiada');
+}
+
+function sortBy(key) {
+  sortKey === key ? sortAsc = !sortAsc : (sortKey = key, sortAsc = true);
+  renderTable();
+}
+
+function updateStats() {
+  const area = getCurrentArea();
+  let total=0, cap=0, zero=0;
+  PARTS.forEach(p => { const q=getQty(area,p); total+=q; q>0?cap++:zero++; });
+  const areasData = Object.keys(inventory).filter(a => PARTS.some(p => getQty(a,p)>0)).length;
+  document.getElementById('statTotal').textContent = total.toLocaleString();
+  document.getElementById('statCap').textContent = cap;
+  document.getElementById('statZero').textContent = zero;
+  document.getElementById('statAreas').textContent = areasData;
+}
+
+function enviarWA() {
+  guardarTodo();
+  const op = document.getElementById('operadorInput').value.trim() || 'Sin nombre';
+  const fecha = todayStr();
+  let msg = `📦 *INVENTARIO CCP — PALLETS*\n📅 ${fecha}   👤 ${op}\n${'─'.repeat(30)}\n\n`;
+  let grand = 0;
+  const areas = Object.keys(inventory);
+  if (!areas.length) { showToast('⚠️ No hay cantidades capturadas'); return; }
+  areas.forEach(area => {
+    const lines = PARTS.map(p => {
+      const q = getQty(area, p);
+      if (q > 0) { grand += q; return `  • ${p}: *${q}*`; }
+      return null;
+    }).filter(Boolean);
+    if (lines.length) msg += `📍 *ÁREA ${area}*\n${lines.join('\n')}\n\n`;
+  });
+  if (!grand) { showToast('⚠️ No hay cantidades capturadas'); return; }
+  msg += `${'─'.repeat(30)}\n*TOTAL GENERAL: ${grand.toLocaleString()} pzas*`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+document.getElementById('searchInput').addEventListener('input', renderTable);
+document.getElementById('areaInput').addEventListener('input', function() {
+  const val = this.value.trim();
+  document.getElementById('areaBadge').textContent = val || '—';
+  renderTable();
+  updateStats();
+});
+
+// Init
+initInventory();
+document.getElementById('fechaVal').textContent = todayStr();
+renderTable();
+updateStats();
+</script>
+</body>
+</html>
